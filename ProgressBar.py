@@ -1,25 +1,20 @@
+from tkinter import *
 from tkinter import ttk
+import time
 
 class Bar:
-    def __init__(self, root, songLength):
+    def __init__(self, frame, songLength):
         self.songLength = songLength
+        self.var = DoubleVar()
 
-        self.bar = ttk.Progressbar(root, orient='horizontal', mode='determinate', length=280)
-        self.bar.grid(column=3, row=0, columnspan=2)
+        value_label = ttk.Label(frame, text=0)
+        value_label.grid(column=2, row=0, sticky=(W,E))
 
-        self.value_label = ttk.Label(root, text=self.update_progress_label())
-        self.value_label.grid(column=0, row=1, columnspan=2)
+        def progress(var):
+            value_label['text'] = int(round(float(var)))
+            time.sleep(1)
+            print(value_label['text'])
+            #self.bar[]
 
-    def update_progress_label(self):
-        return f"Current Progress: {self.bar['value']}%"
-
-    def progress(self):
-        if self.bar['value'] < self.songLength:
-            self.bar['value'] += 1
-            self.value_label['text'] = self.update_progress_label()
-            print(self.value_label['text'])
-
-    def stop(self):
-        self.bar.stop()
-        self.value_label['text'] = self.update_progress_label()
-        self.timer.stop()
+        self.bar = ttk.Scale(frame, orient=HORIZONTAL, length=200, from_=0, to=songLength, variable=self.var, command=progress)
+        self.bar.grid(column=0, row=0, columnspan=2, sticky=(W,E))
