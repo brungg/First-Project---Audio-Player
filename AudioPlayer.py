@@ -1,7 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import AudioControls as ac
-import OpenFile as f
+import OpenFile as of
+import ProgressBar as pb
 
 root = Tk();
 root.title("Audio")
@@ -11,17 +12,19 @@ frame.grid(column=0, row=0, sticky=(N,S,E,W))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
-songLength = 15
+songLength = 100
 
 fileName = ""
 
 def __getFile__():
     global fileName
-    fileName = f.getFile()
+    fileName = of.getFile()
 
 def buttons(txt, cmd, c, r): ttk.Button(frame, text=txt, command=cmd).grid(column=c, row=r, sticky=(W, E))
-# bar = ProgressBar.Bar(root, songLength)
+
 def main():
+    bar = pb.Bar(frame, songLength)
+    
     buttons("start", lambda: ac.__play__(fileName), 1, 1)
     buttons("pause", ac.__pause__, 2, 1)
     buttons("unpause", ac.__unpause__, 3, 1)
