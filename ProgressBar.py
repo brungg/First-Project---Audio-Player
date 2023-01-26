@@ -1,20 +1,22 @@
 from tkinter import *
 from tkinter import ttk
-import time
 
 class Bar:
     def __init__(self, frame, songLength):
+        self.frame = frame
         self.songLength = songLength
-        self.var = DoubleVar()
+        self.var = 0
 
-        value_label = ttk.Label(frame, text=0)
-        value_label.grid(column=2, row=0, sticky=(W,E))
-
-        def progress(var):
-            value_label['text'] = int(round(float(var)))
-            time.sleep(1)
-            print(value_label['text'])
-            #self.bar[]
-
-        self.bar = ttk.Scale(frame, orient=HORIZONTAL, length=200, from_=0, to=songLength, variable=self.var, command=progress)
+        self.bar = ttk.Progressbar(self.frame, orient=HORIZONTAL, mode='determinate', length=200)
         self.bar.grid(column=0, row=0, columnspan=2, sticky=(W,E))
+
+    def start(self):
+        self.var += 1
+        self.bar['value'] = self.var
+        if self.bar['value'] >= self.songLength:
+
+            print("done")
+            # Here you can do anything when the  progress bar finishes.
+
+            return  # This will end the after() loop
+        self.frame.after(1000, self.start)
