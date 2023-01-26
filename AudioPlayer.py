@@ -16,6 +16,8 @@ songLength = 10
 
 fileName = ""
 
+bar = None
+
 def __getFile__():
     global fileName, bar
     fileName = of.getFile()
@@ -23,17 +25,36 @@ def __getFile__():
 def buttons(txt, cmd, c, r): ttk.Button(frame, text=txt, command=cmd).grid(column=c, row=r, sticky=(W, E))
 
 def play():
-    global fileName
-    bar = pb.Bar(frame, ac.__length__(fileName))
+    global fileName, bar
+    bar = pb.Bar(frame, ac.__length__(fileName), fileName)
     bar.start()
-
+    bar.check = True
     ac.__play__(fileName)
+    
+def pause():
+    global fileName, bar
+    bar.stop()
+    bar.check = False
+    ac.__pause__()
+    
+def unpause():
+    global fileName, bar
+    bar.start()
+    bar.check = True
+    ac.__unpause__()
+    
+def stop():
+    global fileName, bar
+    bar.stop()
+    bar.check = False
+    bar.reset()
+    ac.__stop__()
 
 def main(): 
     buttons("start", play, 1, 1)
-    buttons("pause", ac.__pause__, 2, 1)
-    buttons("unpause", ac.__unpause__, 3, 1)
-    buttons("stop", ac.__stop__, 4, 1)
+    buttons("pause", pause, 2, 1)
+    buttons("unpause", unpause, 3, 1)
+    buttons("stop/reset", stop, 4, 1)
 
     buttons("open file", __getFile__, 0, 1)
 
