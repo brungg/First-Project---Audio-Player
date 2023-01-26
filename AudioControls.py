@@ -18,3 +18,8 @@ def __unpause__():
 
 def __stop__():
     pygame.mixer.music.stop()
+
+def __length__(fileName):
+    a = pygame.mixer.Sound(fileName)
+    print(a.get_length())
+    return a.get_length()
