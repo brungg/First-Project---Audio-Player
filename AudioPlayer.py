@@ -12,20 +12,25 @@ frame.grid(column=0, row=0, sticky=(N,S,E,W))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
-songLength = 100
+songLength = 10
 
 fileName = ""
 
 def __getFile__():
-    global fileName
+    global fileName, bar
     fileName = of.getFile()
 
 def buttons(txt, cmd, c, r): ttk.Button(frame, text=txt, command=cmd).grid(column=c, row=r, sticky=(W, E))
 
-def main():
-    bar = pb.Bar(frame, songLength)
-    
-    buttons("start", lambda: ac.__play__(fileName), 1, 1)
+def play():
+    global fileName
+    bar = pb.Bar(frame, ac.__length__(fileName))
+    bar.start()
+
+    ac.__play__(fileName)
+
+def main(): 
+    buttons("start", play, 1, 1)
     buttons("pause", ac.__pause__, 2, 1)
     buttons("unpause", ac.__unpause__, 3, 1)
     buttons("stop", ac.__stop__, 4, 1)
