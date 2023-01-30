@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 
+import math
+
 import AudioControls as ac
 
 class Bar:
@@ -24,7 +26,7 @@ class Bar:
         if self.check:
             self.var += 1
             self.bar['value'] = self.var
-            self.label['text'] = self.var
+            self.label['text'] = self.timer(self.var)
             if self.bar['value'] >= self.songLength:
                 print("done")
                 ac.__stop__()
@@ -34,7 +36,7 @@ class Bar:
     def stop(self):
         if self.loop is not None:
             self.bar['value'] = self.var
-            self.label['text'] = self.var
+            self.label['text'] = self.timer(self.var)
             self.frame.after_cancel(self.loop)
             self.loop = None
             self.check = False
@@ -46,3 +48,14 @@ class Bar:
         self.var = 0
         self.bar['value'] = self.var
         self.label['text'] = self.var
+        self.check = False
+
+    def timer(self, time):
+        minutes = time / 60
+        dec = round(minutes, 2) - math.floor(minutes)
+        seconds = dec * 60
+        if seconds < 10:
+            return f"{math.floor(minutes)}:0{round(seconds)}"
+        return f"{math.floor(minutes)}:{round(seconds)}"
+        
+
