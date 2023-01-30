@@ -28,25 +28,22 @@ def play():
     global fileName, bar
     bar = pb.Bar(frame, ac.__length__(fileName), fileName)
     bar.start()
-    bar.check = True
     ac.__play__(fileName)
     
 def pause():
     global fileName, bar
     bar.stop()
-    bar.check = False
     ac.__pause__()
     
 def unpause():
     global fileName, bar
+    bar.restart()
     bar.start()
-    bar.check = True
     ac.__unpause__()
     
 def stop():
     global fileName, bar
     bar.stop()
-    bar.check = False
     bar.reset()
     ac.__stop__()
 
