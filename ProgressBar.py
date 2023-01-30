@@ -38,6 +38,9 @@ class Bar:
             self.frame.after_cancel(self.loop)
             self.loop = None
             self.check = False
+
+    def restart(self): 
+        self.check = True
         
     def reset(self):
         self.var = 0
