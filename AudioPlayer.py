@@ -21,37 +21,43 @@ bar = None
 def __getFile__():
     global fileName, bar
     fileName = of.getFile()
-
-def buttons(txt, cmd, c, r): ttk.Button(frame, text=txt, command=cmd).grid(column=c, row=r, sticky=(W, E))
-
 def play():
-    global fileName, bar
-    bar = pb.Bar(frame, ac.__length__(fileName), fileName)
+    global bar
+    bar = pb.Bar(frame, ac.__length__(box.get(box.index(box.curselection()))), box.get(box.index(box.curselection())))
     bar.start()
-    ac.__play__(fileName)
-    
+    ac.__play__(box.get(box.index(box.curselection())))
 def pause():
-    global fileName, bar
+    global bar
     bar.stop()
     ac.__pause__()
-    
 def unpause():
-    global fileName, bar
+    global bar
     bar.restart()
     bar.start()
     ac.__unpause__()
-    
 def stop():
-    global fileName, bar
+    global bar
     bar.stop()
     bar.reset()
     ac.__stop__()
+def add():
+    box.insert(box.size(), for fileName)
+#def delete():
+#    pass
+
+def buttons(txt, cmd, c, r): ttk.Button(frame, text=txt, command=cmd).grid(column=c, row=r, sticky=(W, E))
+
+choice = StringVar()
+box = Listbox(frame, listvariable=choice)
+box.grid(column=4, columnspan=3, row=0)
 
 def main(): 
     buttons("start", play, 1, 1)
     buttons("pause", pause, 2, 1)
     buttons("unpause", unpause, 3, 1)
     buttons("stop/reset", stop, 4, 1)
+    buttons("add", add, 1, 2)
+    #buttons("delete", delete, 2, 2)
 
     buttons("open file", __getFile__, 0, 1)
 
