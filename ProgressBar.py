@@ -17,10 +17,10 @@ class Bar:
         self.check = True
 
         self.label = ttk.Label(self.frame, text=0)
-        self.label.grid(column=3, row=0, sticky=W)
+        self.label.grid(column=4, row=0, sticky=W)
 
         self.bar = ttk.Progressbar(self.frame, orient=HORIZONTAL, maximum=self.songLength, mode='determinate', length=200)
-        self.bar.grid(column=0, row=0, columnspan=3, sticky=(W,E))
+        self.bar.grid(column=0, row=0, columnspan=4, sticky=(W,E))
 
     def start(self):
         if self.check:
@@ -57,6 +57,3 @@ class Bar:
         if seconds < 10:
             return f"{math.floor(minutes)}:0{round(seconds)}"
         return f"{math.floor(minutes)}:{round(seconds)}"
-        
-
-
