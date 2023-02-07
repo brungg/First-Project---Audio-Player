@@ -24,9 +24,9 @@ class Bar:
 
     def start(self):
         if self.check:
+            self.label['text'] = self.timer(self.var)
             self.var += 1
             self.bar['value'] = self.var
-            self.label['text'] = self.timer(self.var)
             if self.bar['value'] >= self.songLength:
                 print("done")
                 ac.__stop__()
@@ -58,4 +58,5 @@ class Bar:
             return f"{math.floor(minutes)}:0{round(seconds)}"
         return f"{math.floor(minutes)}:{round(seconds)}"
         
+
 
