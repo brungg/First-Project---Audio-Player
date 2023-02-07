@@ -17,6 +17,7 @@ fileName = []
 bar = None
 currentSong = 0
 box = None
+isPlaying = False
 
 def __getFile__():
     global fileName, box
@@ -27,56 +28,47 @@ def __getFile__():
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
     
-def play():
-    global bar, currentSong
+def play_pause():
+    global bar, currentSong, isPlaying
     try:
-        bar = pb.Bar(frame, ac.__length__(fileName[box.index(box.curselection())]), fileName[box.index(box.curselection())])
-        currentSong = box.index(box.curselection())
-        bar.start()
-        ac.__play__(fileName[box.index(box.curselection())])
+        if not fileName[box.index(box.curselection())] == currentSong and not isPlaying:
+            bar = pb.Bar(frame, ac.__length__(fileName[box.index(box.curselection())]), fileName[box.index(box.curselection())])
+            currentSong = box.index(box.curselection())
+            bar.start()
+            ac.__play__(fileName[box.index(box.curselection())])
+            isPlaying = True
+        elif isPlaying:
+            bar.stop()
+            ac.__pause__()
+            isPlaying = False
+        else:
+            bar.restart()
+            bar.start()
+            ac.__unpause__()
+            isPlaying = True
     except Exception:
-        messagebox.showerror("Warning", "Please selected a file")
-
-def pause():
-    try:
-        bar.stop()
-        ac.__pause__()
-    except Exception:
-        messagebox.showerror("Warning", "Please selected a file")
-
-def unpause():
-    try:
-        bar.restart()
-        bar.start()
-        ac.__unpause__()
-    except Exception:
-        messagebox.showerror("Warning", "Please selected a file")
-def stop():
-    try:
-        bar.stop()
-        bar.reset()
-        ac.__stop__()
-    except Exception:
-        messagebox.showerror("Warning", "Please selected a file")
+            messagebox.showerror("Warning", "Please selected a file")
 
 def skip_song_fwd():
-    global bar, currentSong
+    global bar, currentSong, isPlaying
     currentSong += 1
     try:
         bar = pb.Bar(frame, ac.__length__(fileName[currentSong]), fileName[currentSong])
         bar.start()
         ac.__play__(fileName[currentSong])
+        isPlaying = True
     except Exception:
         currentSong -= 1
         messagebox.showerror("Warning", "Last file in queue")
 
 def skip_song_bwd():
-    global bar, currentSong
+    global bar, currentSong, isPlaying
     currentSong -= 1
     try:
         bar = pb.Bar(frame, ac.__length__(fileName[currentSong]), fileName[currentSong])
         bar.start()
         ac.__play__(fileName[currentSong])
+        isPlaying = True
     except Exception:
         currentSong += 1
         messagebox.showerror("Warning", "First file in queue")
@@ -91,6 +83,8 @@ def delete():
 def moveup():
     global fileName
     try:
+        if box.index(box.curselection()) == 0:
+            return
         f = fileName[box.index(box.curselection())]
         fileName.pop(box.index(box.curselection()))
         fileName.insert(box.index(box.curselection()) - 1, f)
@@ -112,23 +106,20 @@ def movedown():
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
 
-def buttons(txt, cmd, c, r): ttk.Button(frame, text=txt, command=cmd).grid(column=c, row=r, sticky=(W, E))
+def buttons(txt, cmd, c, r, x, s): ttk.Button(frame, text=txt, width=x, command=cmd).grid(column=c, columnspan=s, row=r, sticky=(W, E))
 
 box = Listbox(frame)
-box.grid(column=4, columnspan=3, row=0)
+box.grid(column=5, columnspan=3, row=0)
 
 def main(): 
-    buttons("start", play, 1, 1)
-    buttons("pause", pause, 2, 1)
-    buttons("unpause", unpause, 3, 1)
-    buttons("stop/reset", stop, 4, 1)
-    buttons("delete", delete, 1, 2)
-    buttons(">|", skip_song_fwd, 4, 2)
-    buttons("|<", skip_song_bwd, 3, 2)
-    buttons("↑", moveup, 2, 2)
-    buttons("↓", movedown, 2, 3)
+    buttons("play/pause", play_pause, 1, 3, 10, 1)
+    buttons("delete", delete, 7, 3, 6, 1)
+    buttons("|<", skip_song_bwd, 0, 3, 2, 1)
+    buttons(">|", skip_song_fwd, 2, 3, 2, 1)
+    buttons("↑", moveup, 6, 1, 1, 1)
+    buttons("↓", movedown, 5, 1, 1, 1)
 
-    buttons("open file", __getFile__, 0, 1)
+    buttons("open file", __getFile__, 7, 1, 9, 1)
 
     root.mainloop()
 
