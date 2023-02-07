@@ -5,7 +5,7 @@ import OpenFile as of
 import ProgressBar as pb
 
 root = Tk()
-root.title("Audio")
+root.title("DotiPY")
 
 frame = ttk.Frame(root, padding="5 5 15 15")
 frame.grid(column=0, row=0, sticky=(N,S,E,W))
@@ -20,9 +20,13 @@ box = None
 
 def __getFile__():
     global fileName, box
-    fileName.append(of.getFile())
-    i = fileName[-1].split("/")
-    box.insert(box.size(), i[-1][:-4])
+    try:
+        fileName.append(of.getFile())
+        i = fileName[-1].split("/")
+        box.insert(box.size(), i[-1][:-4])
+    except Exception:
+        messagebox.showerror("Warning", "Please selected a file")
+    
 def play():
     global bar, currentSong
     try:
@@ -32,12 +36,14 @@ def play():
         ac.__play__(fileName[box.index(box.curselection())])
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
+
 def pause():
     try:
         bar.stop()
         ac.__pause__()
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
+
 def unpause():
     try:
         bar.restart()
@@ -52,6 +58,7 @@ def stop():
         ac.__stop__()
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
+
 def skip_song_fwd():
     global bar, currentSong
     currentSong += 1
@@ -62,6 +69,7 @@ def skip_song_fwd():
     except Exception:
         currentSong -= 1
         messagebox.showerror("Warning", "Last file in queue")
+
 def skip_song_bwd():
     global bar, currentSong
     currentSong -= 1
@@ -72,12 +80,14 @@ def skip_song_bwd():
     except Exception:
         currentSong += 1
         messagebox.showerror("Warning", "First file in queue")
+
 def delete():
     try:
         fileName.pop(box.index(box.curselection()))
         box.delete(box.index(box.curselection()))
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
+
 def moveup():
     global fileName
     try:
@@ -89,6 +99,7 @@ def moveup():
         box.insert(fileName.index(f), i[-1][:-4])
     except Exception:
         messagebox.showerror("Warning", "Please selected a file")
+
 def movedown():
     global fileName
     try:
